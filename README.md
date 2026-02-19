@@ -1,98 +1,68 @@
 # BaleSupply
 
-Sistema web para control de tráileres con pacas y gestión de solicitudes entre Buyer/Vendor, con aprobaciones de Admin y bitácora (audit log) de movimientos.
+Sistema web MVC (PHP + MySQL) para gestionar solicitudes de pacas por tráiler entre roles `buyer`, `vendor`, `admin` y `viewer`, con trazabilidad en `request_events` y `audit_logs`.
 
-## Índice
-1. Propuesta
-2. Stack tecnológico
-3. Roles
-4. Procesos (DFD P1–P5)
-5. Arquitectura y patrones de diseño
-6. Estructura del repositorio
-7. Instalación local (MAMP)
-8. Base de datos (MySQL)
-9. Flujo de Git (main/develop)
-10. Licencia
-11. Evidencias (GitHub)
+## Funcionalidad implementada
+- Autenticación por sesión (login/logout) con CSRF.
+- Control de acceso por rol (middleware RBAC).
+- P1: Buyer crea solicitudes.
+- P2: Vendor confirma cantidad.
+- P3: Admin aprueba o rechaza.
+- P4: Todos los roles actualizan su perfil.
+- P5: Búsqueda en solicitudes y usuarios (usuarios solo admin).
+- Dashboard con métricas básicas y actividad reciente.
+- Bitácora de auditoría (`audit_logs`) y eventos por solicitud (`request_events`).
 
----
+## Estructura del repositorio
+- `app/`
+  - `Controllers/` lógica de rutas
+  - `Core/` router, DB, auth, view, helpers
+  - `Middleware/` auth/guest/role
+  - `Models/` acceso a datos
+  - `Views/` plantillas
+- `config/` configuración app/db
+- `public/` entrada web y assets
+- `routes/` rutas HTTP
+- `database/migrations/` esquema SQL
+- `database/seeds/` datos demo
+- `storage/` logs/cache/sessions
+- `kanban/` script para crear issues en GitHub
+- `docs/` documentación de flujo
 
-## 1) Propuesta
-BaleSupply centraliza:
-- Solicitudes de compra/venta de pacas por tráiler.
-- Confirmación de cantidad por Vendor.
-- Aprobación/Rechazo por Admin.
-- Actualización de perfil por cualquier rol.
-- Búsqueda en el sitio (por solicitudes y usuarios).
-- Registro de acciones (audit log) para trazabilidad.
+## Requisitos locales
+- MAMP (Apache + MySQL + PHP)
+- MySQL con acceso a `root`
 
----
+## Instalación local (MAMP)
+1. Coloca el proyecto en:
+   `/Applications/MAMP/htdocs/BaleSupply`
+2. Crea el archivo `.env` desde el ejemplo:
+   ```bash
+   cp .env.example .env
+   ```
+3. Crea la DB y tablas ejecutando:
+   - `database/migrations/001_init.sql`
+   - `database/seeds/001_seed.sql`
+4. Ajusta credenciales en `.env` si tu MySQL usa otra contraseña.
+5. Entra en el navegador:
+   `http://localhost/BaleSupply/public/`
 
-## 2) Stack tecnológico
-- Backend: PHP (MVC)
-- Frontend: HTML + CSS + JavaScript (jQuery)
-- Base de datos: MySQL
-- Hosting/producción: BLUEHOST (Apache + PHP)
-- Control de versiones: GitHub (repo público)
+## Usuarios demo
+Todos usan contraseña: `password`
+- admin: `admin@balesupply.local`
+- vendor: `vendor@balesupply.local`
+- buyer: `buyer@balesupply.local`
+- viewer: `viewer@balesupply.local`
 
----
+## Flujo de uso sugerido
+1. Inicia sesión como `buyer`, crea solicitud.
+2. Inicia sesión como `vendor`, confirma cantidad.
+3. Inicia sesión como `admin`, aprueba/rechaza.
+4. Revisa historial en detalle de solicitud y `Audit Logs`.
 
-## 3) Roles
-- Admin: gestiona usuarios, aprueba/rechaza solicitudes, consulta logs/estadísticas.
-- Vendor: confirma cantidad para solicitudes asignadas, edita su perfil, busca.
-- Buyer: crea solicitudes, edita su perfil, busca.
-- Viewer: solo lectura (consultas), busca.
+## Notas
+- El punto de entrada es `public/index.php`.
+- `APP_BASE_PATH` está configurado para MAMP en `.env.example`.
 
----
-
-## 4) Procesos (DFD P1–P5)
-DFD base (Mermaid):
-
-```mermaid
-flowchart TD
-  %% ============ Actores ============
-  B[Buyer] 
-  V[Vendor]
-  A[Admin]
-
-  %% ============ Procesos ============
-  P1((P1: Crear Solicitud))
-  P2((P2: Vendor Confirma Cantidad))
-  P3((P3: Admin Aprueba/Rechaza))
-  P4((P4: Actualizar Perfil))
-  P5((P5: Busqueda en el sitio))
-
-  %% ============ Almacenes de datos ============
-  DBU[(users)]
-  DBR[(requests)]
-  DBE[(request_events)]
-  DBA[(audit_logs)]
-
-  %% ============ Flujos ============
-  B -->|Solicitud| P1
-  P1 -->|INSERT| DBR
-  P1 -->|INSERT| DBE
-  P1 -->|INSERT log| DBA
-
-  V -->|Confirmar| P2
-  P2 -->|UPDATE| DBR
-  P2 -->|INSERT evento| DBE
-  P2 -->|INSERT log| DBA
-
-  A -->|Aprobar/Rechazar| P3
-  P3 -->|UPDATE| DBR
-  P3 -->|INSERT evento| DBE
-  P3 -->|INSERT log| DBA
-
-  B -->|Editar perfil| P4
-  V -->|Editar perfil| P4
-  A -->|Editar perfil| P4
-  P4 -->|UPDATE| DBU
-  P4 -->|INSERT log| DBA
-  
-  B -->|Buscar| P5
-  V -->|Buscar| P5
-  A -->|Buscar| P5
-  P5 -->|SELECT| DBR
-  P5 -->|SELECT| DBU
-  P5 -->|INSERT log| DBA
+## Licencia
+MIT (ver `LICENSE`).
