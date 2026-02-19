@@ -1,0 +1,30 @@
+milestone,title,body,labels
+M0 - Repo y estándares,chore(repo): crear estructura base del proyecto (MVC + assets + config),"Crear estructura inicial del codebase en local.\nCriterios: carpetas app/, public/, config/, scripts/, docs/; .gitignore y .env.example; README con pasos básicos.","chore,setup"
+M0 - Repo y estándares,"docs(readme): agregar guía de instalación, configuración y ejecución en local","Documentar requisitos, .env, DB, migraciones, credenciales demo (si aplica), pasos para levantar el proyecto.",docs
+M0 - Repo y estándares,chore(license): agregar licencia FLOSS (MIT o GPL),Agregar LICENSE y mencionarlo en README.,"chore,docs"
+M0 - Repo y estándares,chore(git): definir flujo de ramas main/develop y reglas básicas,Crear docs/git-flow.md con explicación simple de main/develop/feature.,"chore,docs"
+M0 - Repo y estándares,chore(github): agregar issue templates personalizados,Agregar .github/ISSUE_TEMPLATE/* y evidencias en el documento final.,"chore,docs"
+M0 - Repo y estándares,chore(github): crear Project Kanban y agregar miembros/evidencia (invitar prof.),"Crear Project Kanban, invitar profesor, y capturas de evidencia.","chore,docs"
+"M1 - Auth, roles y perfiles","feat(auth): modelo de usuarios + roles (admin, vendor, buyer, viewer)","Implementar tabla users con role, password hash, status, timestamps.","feature,auth"
+"M1 - Auth, roles y perfiles",feat(auth): login + sesiones seguras,"Implementar login, sesiones seguras, middleware auth, logout. Validación server-side.","feature,auth"
+"M1 - Auth, roles y perfiles",feat(auth): reset password via email (token + expiración),"Flujo reset: solicitar, token con expiración, enviar email, cambio password, invalidar token. Registrar audit_logs.","feature,auth,email"
+"M1 - Auth, roles y perfiles",feat(profile): actualizar perfil (nombre/teléfono) sin cambiar email/username,"Pantalla perfil: editar nombre/teléfono, bloquear email/username, validar formato, registrar audit_log.","feature,profile"
+"M1 - Auth, roles y perfiles",feat(users-admin): CRUD usuarios (solo admin),"Admin: crear, editar (sin email/username), activar/desactivar. Registrar audit_logs.","feature,admin"
+"M1 - Auth, roles y perfiles",feat(authz): control de acceso por rol (RBAC) en rutas/acciones,Middleware/guard para admin/vendor/buyer/viewer. Evitar acceso directo a endpoints.,"feature,security"
+M2 - Solicitudes (P1-P3),feat(requests): P1 Crear Solicitud (Buyer),"Formulario solicitud: vendor, cantidad, fecha (opcional), notas. Guardar requests + request_events + audit_logs.","feature,requests"
+M2 - Solicitudes (P1-P3),feat(requests): P2 Vendor confirma cantidad,"Vendor: listar pendientes, confirmar cantidad, actualizar status. Guardar evento + audit_log.","feature,requests"
+M2 - Solicitudes (P1-P3),feat(requests): P3 Admin aprueba/rechaza (con notas),"Admin: aprobar/rechazar, notas. Guardar evento + audit_log.","feature,admin,requests"
+M2 - Solicitudes (P1-P3),feat(requests): historial por solicitud (request_events),"UI historial: eventos, actor, cambios de status, notas. Permisos por rol.","feature,requests"
+M3 - Perfil + búsqueda + logs (P4-P5),feat(profile): P4 Actualizar Perfil (todos los roles),Actualizar perfil (nombre/teléfono) para buyer/vendor/admin/viewer. Guardar audit_log.,"feature,profile"
+M3 - Perfil + búsqueda + logs (P4-P5),feat(search): P5 búsqueda en el sitio (requests + users),"Barra de búsqueda. Requests (todos, filtrados por rol). Users (solo admin). Registrar audit_log.","feature,search"
+M3 - Perfil + búsqueda + logs (P4-P5),feat(logs): audit_logs (registro de movimientos),"Registrar acciones clave: login/logout, CRUD, requests, aprobaciones, perfil, búsquedas. Campos: actor, action, entity, metadata, ip, user_agent, created_at.","feature,logs"
+M3 - Perfil + búsqueda + logs (P4-P5),feat(stats): tablero mínimo de métricas,"Dashboard: #solicitudes por status, top vendors, actividad reciente (logs). Acceso por rol.","feature,stats"
+M3 - Perfil + búsqueda + logs (P4-P5),feat(errors): página 404 / error page,Crear página 404 (y opcional 500) con links a inicio/ayuda.,"feature,ui"
+M3 - Perfil + búsqueda + logs (P4-P5),feat(validation): validación de datos en formularios (cliente + servidor),Validaciones required/format/range. Mantener validación principal en servidor.,"feature,validation"
+"M4 - UI, mapas y evidencias",docs(sitemap): elaborar mapa del sitio (secciones principales/secundarias/adicionales),"Crear /sitemap y docs con secciones: registrar, buzón, login, ayuda, contáctanos, sitemap, recuperación, chat, búsqueda.",docs
+"M4 - UI, mapas y evidencias",feat(nav): menú de navegación con ID del sitio + búsqueda,"Navbar/Sidebar con BaleSupply, secciones principales, elementos adicionales, búsqueda. Mostrar según rol.","feature,ui"
+"M4 - UI, mapas y evidencias","feat(pages): páginas ayuda, contáctanos, about (créditos)","Crear /about, /help, /contact.","feature,ui,docs"
+"M4 - UI, mapas y evidencias",docs(dfd): agregar DFD en Mermaid (P1-P5) + explicación,"Incluir Mermaid DFD P1-P5 y explicar actores, procesos, almacenes, audit_logs.",docs
+"M4 - UI, mapas y evidencias",docs(mockups): agregar mockups/frames de entradas y salidas,"Agregar mockups: Login/Reset, Dashboard, Solicitudes, Usuarios admin, Perfil, Logs/Stats, Sitemap/404.","docs,ui"
+"M4 - UI, mapas y evidencias",docs(portafolio): armar portafolio de evidencias,"Incluir links repo/project, integrantes, invitación profesor, capturas conventional commits (si aplica), templates, kanban, conclusiones.",docs
+"M4 - UI, mapas y evidencias",chore(db): definir esquema MySQL + migraciones,"Tablas: users, requests, request_events, audit_logs. Índices y FKs. Documentar ejecución.","chore,db"
